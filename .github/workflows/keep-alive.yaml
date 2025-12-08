@@ -1,0 +1,21 @@
+name: Keep Render Backend Alive
+
+on:
+  schedule:
+    # Runs every 14 minutes
+    # Time window: 02:00 UTC (7:30 AM IST) to 18:00 UTC (00:30 AM IST)
+    # This keeps the server asleep between roughly 12:30 AM and 7:30 AM IST
+    - cron: '*/14 2-18 * * *'
+
+  workflow_dispatch: # Allows manual testing
+
+jobs:
+  ping_backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Render Backend
+        run: |
+          echo "Pinging HashChat Backend..."
+          # -I shows headers only
+          # -X OPTIONS sends an OPTIONS request (Whitelisted in your SecurityConfig)
+          curl -I -X OPTIONS https://hashchat-deployement.onrender.com/ping
